@@ -1,63 +1,90 @@
-import Image from "next/image";
+import Link from "next/link";
+import { ShieldCheck, GraduationCap, UserCog, ArrowRight, Activity, Lock } from "lucide-react";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="flex-1 flex flex-col relative overflow-hidden bg-slate-50">
+      {/* Background decorations */}
+      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-primary-200/40 blur-3xl mix-blend-multiply" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-indigo-200/40 blur-3xl mix-blend-multiply" />
+
+      {/* Navbar */}
+      <nav className="w-full px-6 py-4 flex items-center justify-between z-10 border-b border-slate-200/50 bg-white/50 backdrop-blur-md">
+        <div className="flex items-center gap-2">
+          <div className="bg-primary-600 p-2 rounded-lg">
+            <ShieldCheck className="w-6 h-6 text-white" />
+          </div>
+          <span className="text-xl font-bold tracking-tight text-slate-900">ProctorAI</span>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <div className="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600">
+          <span className="hover:text-primary-600 cursor-pointer transition-colors">Features</span>
+          <span className="hover:text-primary-600 cursor-pointer transition-colors">Security</span>
+          <span className="hover:text-primary-600 cursor-pointer transition-colors">About</span>
+        </div>
+      </nav>
+
+      {/* Main Content */}
+      <main className="flex-1 flex items-center justify-center p-6 z-10">
+        <div className="max-w-4xl w-full flex flex-col items-center text-center">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-50 text-primary-700 text-sm font-semibold mb-6 border border-primary-100 shadow-sm">
+            <Activity className="w-4 h-4" />
+            <span>Next-Generation Online Testing</span>
+          </div>
+
+          <h1 className="text-5xl md:text-7xl font-extrabold text-slate-900 tracking-tight mb-6 leading-tight">
+            AI Proctored <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-indigo-600">
+              Exam System
+            </span>
+          </h1>
+
+          <p className="text-lg md:text-xl text-slate-600 max-w-2xl mb-12 leading-relaxed">
+            A secure, reliable, and advanced online examination platform. 
+            Ensure academic integrity with real-time AI monitoring and seamless user experience.
+          </p>
+
+          <div className="grid md:grid-cols-2 gap-6 w-full max-w-3xl">
+            {/* Teacher Card */}
+            <div className="group relative bg-white rounded-2xl p-8 shadow-sm border border-slate-200 hover:shadow-xl hover:border-primary-200 transition-all duration-300 text-left flex flex-col">
+              <div className="bg-blue-50 w-14 h-14 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                <UserCog className="w-7 h-7 text-primary-600" />
+              </div>
+              <h2 className="text-2xl font-bold text-slate-900 mb-2">For Teachers</h2>
+              <p className="text-slate-600 mb-8 flex-1">
+                Create custom exams, manage questions, and generate secure test links for your students in seconds.
+              </p>
+              <Link 
+                href="/teacher"
+                className="inline-flex items-center justify-between w-full bg-slate-900 hover:bg-slate-800 text-white px-6 py-4 rounded-xl font-medium transition-colors"
+              >
+                <span>Create Test</span>
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </div>
+
+            {/* Student Card */}
+            <div className="group relative bg-white rounded-2xl p-8 shadow-sm border border-slate-200 hover:shadow-xl hover:border-indigo-200 transition-all duration-300 text-left flex flex-col">
+              <div className="bg-indigo-50 w-14 h-14 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                <GraduationCap className="w-7 h-7 text-indigo-600" />
+              </div>
+              <h2 className="text-2xl font-bold text-slate-900 mb-2">For Students</h2>
+              <p className="text-slate-600 mb-8 flex-1">
+                Join an active examination securely. Requires camera and microphone access for AI proctoring.
+              </p>
+              <Link 
+                href="/student"
+                className="inline-flex items-center justify-between w-full bg-primary-600 hover:bg-primary-700 text-white px-6 py-4 rounded-xl font-medium transition-colors shadow-lg shadow-primary-500/30"
+              >
+                <span>Start Test</span>
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </div>
+          </div>
+          
+          <div className="mt-16 flex items-center gap-2 text-slate-500 text-sm">
+            <Lock className="w-4 h-4" />
+            <span>End-to-end encrypted • Automated anomaly detection</span>
+          </div>
         </div>
       </main>
     </div>
