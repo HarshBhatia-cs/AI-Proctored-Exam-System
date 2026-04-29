@@ -56,6 +56,15 @@ function ExamContent() {
   const [warnings, setWarnings] = useState(0);
   const [showWarningModal, setShowWarningModal] = useState(false);
 
+  const warningsRef = useRef(0);
+  const isModalOpenRef = useRef(false);
+  const examEndedRef = useRef(false);
+  const answersRef = useRef(answers);
+
+  useEffect(() => { warningsRef.current = warnings; }, [warnings]);
+  useEffect(() => { isModalOpenRef.current = showWarningModal; }, [showWarningModal]);
+  useEffect(() => { answersRef.current = answers; }, [answers]);
+
   // Video Ref for Camera
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -123,9 +132,14 @@ function ExamContent() {
     return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
   };
 
-  const handleSimulateTabSwitch = () => {
-    const newWarnings = warnings + 1;
+  const handleViolation = () => {
+    if (examEndedRef.current) return;
+    if (isModalOpenRef.current) return;
+
+    const newWarnings = warningsRef.current + 1;
     setWarnings(newWarnings);
+    warningsRef.current = newWarnings;
+
     if (newWarnings >= 2) {
       handleAutoSubmit("terminated");
     } else {
@@ -133,11 +147,35 @@ function ExamContent() {
     }
   };
 
-  const handleAutoSubmit = (status: "completed" | "terminated") => {
+  // Real-time tab/window switch detection
+  useEffect(() => {
     if (!examData) return;
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        handleViolation();
+      }
+    };
+
+    const handleBlur = () => {
+      handleViolation();
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("blur", handleBlur);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("blur", handleBlur);
+    };
+  }, [examData]);
+
+  const handleAutoSubmit = (status: "completed" | "terminated") => {
+    if (!examData || examEndedRef.current) return;
+    examEndedRef.current = true;
     let score = 0;
     examData.questions.forEach((q: any) => {
-      if (answers[q.id] === q.correctAnswer) score++;
+      if (answersRef.current[q.id] === q.correctAnswer) score++;
     });
 
     // Save result to localStorage
@@ -204,13 +242,6 @@ function ExamContent() {
         </div>
 
         <div className="flex items-center gap-6">
-          <button 
-            onClick={handleSimulateTabSwitch}
-            className="text-xs font-bold px-3 py-1.5 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors border border-red-200"
-          >
-            Simulate Tab Switch
-          </button>
-          
           <div className="flex items-center gap-2 bg-slate-50 px-4 py-2 rounded-xl border border-slate-200">
             <Clock className={`w-5 h-5 ${timeLeft < 300 ? 'text-red-500 animate-pulse' : 'text-slate-600'}`} />
             <span className={`font-mono font-bold text-lg ${timeLeft < 300 ? 'text-red-600' : 'text-slate-800'}`}>
